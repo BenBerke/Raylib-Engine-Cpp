@@ -4,16 +4,20 @@
         {
             "label": "Build and Run Raylib",
             "type": "shell",
-            "command": "cmd.exe",
+            "command": "powershell",
             "args": [
-                "/c",
-                "g++ src/*.cpp main.cpp -I include -I C:/Users/berke/raylib/include -L C:/Users/berke/raylib/lib -lraylib -lopengl32 -lgdi32 -lwinmm -std=c++17 -o game.exe && game.exe"
+                "-NoProfile",
+                "-Command",
+                "& { " +
+                "$files = Get-ChildItem -Path src -Filter *.cpp -Recurse | ForEach-Object { $_.FullName }; " +
+                "g++ $files -o game.exe -I include -I C:/Users/berke/raylib/include -L C:/Users/berke/raylib/lib -lraylib -lopengl32 -lgdi32 -lwinmm -std=c++17; " +
+                "if ($?) { .\\game.exe }" +
+                " }"
             ],
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "problemMatcher": [],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -22,9 +26,7 @@
                 "showReuseMessage": true,
                 "clear": true
             },
-            "options": {
-                "cwd": "${workspaceFolder}"
-            }
+            "problemMatcher": []
         }
     ]
 }
